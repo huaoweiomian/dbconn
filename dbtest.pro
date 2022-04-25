@@ -15,6 +15,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        dbconn.cpp \
+        dbpool.cpp \
         main.cpp
 
 # Default rules for deployment.
@@ -28,3 +30,7 @@ win32: LIBS += -L'C:/Program Files/MySQL/MySQL Server 5.7/lib/' -llibmysql
 
 INCLUDEPATH += 'C:/Program Files/MySQL/MySQL Server 5.7/include'
 DEPENDPATH += 'C:/Program Files/MySQL/MySQL Server 5.7/include'
+
+HEADERS += \
+    dbconn.h \
+    dbpool.h
