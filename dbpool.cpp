@@ -19,8 +19,10 @@ bool DBPOOL::init_pool()
 
 DBCONN *DBPOOL::new_conn()
 {
-    if(conns.empty())
-        return NULL;
+    std::lock_guard<std::mutex> lck (mtx);
+    if(conns.empty()&&!init_pool()){
+            return NULL;
+    }
     DBCONN * ret = conns.front();
     conns.pop_front();
     return ret;
@@ -28,10 +30,20 @@ DBCONN *DBPOOL::new_conn()
 
 void DBPOOL::del_conn(DBCONN *pconn)
 {
+    std::lock_guard<std::mutex> lck (mtx);
     conns.push_front(pconn);
+}
+
+DBPOOL::~DBPOOL()
+{
+    rel_pool();
 }
 
 void DBPOOL::rel_pool()
 {
-
+    while (!conns.empty()) {
+        DBCONN * ret = conns.front();
+        conns.pop_front();
+        delete ret;
+    }
 }
